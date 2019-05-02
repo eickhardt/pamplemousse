@@ -74,6 +74,9 @@ $app['slug'] = $app->share(function ($app) {
 $app['tags'] = $app->share(function ($app) {
     return new Pamplemousse\Tags\Service($app);
 });
+$app['kids'] = $app->share(function ($app) {
+    return new Pamplemousse\Kids\Service($app);
+});
 $app['imagine'] = $app->share(function ($app) {
     $imagine = new \Imagine\Gd\Imagine();
     $imagine->setMetadataReader(new \Imagine\Image\Metadata\ExifMetadataReader());
@@ -85,6 +88,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $app->mount('/', new Pamplemousse\Router());
+$app->mount('/rss/', new Pamplemousse\RSS\Router());
 $app->mount('/photo/', new Pamplemousse\Photos\Router());
 $app->mount('/admin/', new Pamplemousse\Admin\Router());
 

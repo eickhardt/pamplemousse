@@ -18,16 +18,20 @@ class Controller
      */
     public function indexAction(Application $app, Request $request)
     {
-        $filter = $request->get('filter');
+        $filter = $request->get('tag');
+        $kids = $request->get('kids');
 
-        if (is_null($filter)) {
-            $photos = $app['photos']->getLast(self::IMAGE_PER_PAGE);
+        if (!is_null($filter)) {
+            $photos = $app['photos']->getWithTag($filter, self::IMAGE_PER_PAGE);
+        } else if (!is_null($kids)) {
+            $photos = $app['photos']->getForKids($kids, self::IMAGE_PER_PAGE);
         } else {
-            $photos = $app['photos']->getWithTag($filter);
+            $photos = $app['photos']->getLast(self::IMAGE_PER_PAGE);
         }
 
         return $app['twig']->render('index.twig', [
             'photos' => $photos,
+            'photo_per_page' => self::IMAGE_PER_PAGE
         ]);
     }
 
@@ -100,23 +104,22 @@ class Controller
      */
     public function fromAction(Application $app, Request $request, $date = null)
     {
+        $filter = $request->get('tag');
+        $kids = $request->get('kids');
+
+        if (!is_null($filter)) {
+            $photos = $app['photos']->getWithTag($filter, self::IMAGE_PER_PAGE, $date);
+        } else if (!is_null($kids)) {
+            $photos = $app['photos']->getForKids($kids, self::IMAGE_PER_PAGE, $date);
+        } else {
+            $photos = $app['photos']->getLast(self::IMAGE_PER_PAGE, $date);
+        }
+
         return $app['twig']->render('partials/thumbnails.twig', [
-            'photos' => $app['photos']->getLast(self::IMAGE_PER_PAGE, $date)
+            'photos' => $photos
         ]);
     }
 
-    /**
-     * @param  Application $app
-     * @param  Request     $request
-     * @return Response
-     */
-    public function commentRssAction(Application $app, Request $request)
-    {
-        return $app['twig']->render('rss.twig', [
-            'comments' => $app['comments']->getLast()
-        ]);
-    }
-    
 
     /**
      * @param  Application $app
