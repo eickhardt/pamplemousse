@@ -13,7 +13,7 @@
                     data-age-caption="{{ photo|age_caption }}"
                     data-comments-count="{{ photo.comments_count }}"
                     data-url="{{ url('photo', { 'photo': photo.id }) }}"
-                    alt="{{ photo.filename }}"
+                    alt="{{ photo.kidname }}_{{ photo.filename }}"
                     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                     onload="lzld(this)"
             />
